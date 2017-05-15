@@ -41,7 +41,9 @@ module Lita
               @logger.error "thienhv"
               @logger.error "42 thienhv Message: #{result.inspect}"
               next if result.is_a?(ChatWork::APIError) and result.message == "204"
-              result.to_a.each do |m|
+
+              @logger.error "45: #{result.class}"
+              result.each do |m|
                 next if m["account"]["account_id"] == @me["account_id"]
                 user = Lita::User.find_by_id(m["account"]["account_id"])
                 unless user
