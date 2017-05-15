@@ -13,7 +13,7 @@ module Lita
           @interval   = interval
           @with_reply = with_reply
           @debug      = debug
-          @logger = Logger.new("/home/ec2-user/thienhv.log")
+          @logger = ::Logger.new("/home/ec2-user/thienhv.log")
         end
 
         def connect
