@@ -13,6 +13,7 @@ module Lita
           @interval   = interval
           @with_reply = with_reply
           @debug      = debug
+          @logger = Logger.new("/home/ec2-user/thienhv.log")
         end
 
         def connect
@@ -24,6 +25,7 @@ module Lita
           loop do
             wait
             result = ChatWork::Room.get
+            p "thienhv"
             if result.is_a?(ChatWork::APIError)
               @logger.error "ChatWork::Room.get result: #{result} (#{result.message})"
               break
