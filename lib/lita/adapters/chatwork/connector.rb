@@ -26,6 +26,7 @@ module Lita
             wait
             result = ChatWork::Room.get
             p "thienhv"
+            @logger.error "thienhv 29: #{result.inspect}"
             if result.is_a?(ChatWork::APIError)
               @logger.error "ChatWork::Room.get result: #{result} (#{result.message})"
               break
