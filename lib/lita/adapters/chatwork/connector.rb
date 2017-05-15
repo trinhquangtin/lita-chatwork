@@ -34,6 +34,7 @@ module Lita
             (joined_rooms | unread_rooms).each do |r|
               wait
               result = ChatWork::Message.get(room_id: r["room_id"])
+              @logger.error "thienhv: #{result.inspect}"
               next if result.is_a?(ChatWork::APIError) and result.message == "204"
               result.each do |m|
                 next if m["account"]["account_id"] == @me["account_id"]
