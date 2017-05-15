@@ -39,9 +39,9 @@ module Lita
               @logger.error "room_id: #{r["room_id"]}"
               result = ChatWork::Message.get(room_id: r["room_id"])
               @logger.error "thienhv"
-              @logger.error "thienhv: #{result.inspect}"
+              @logger.error "42 thienhv Message: #{result.inspect}"
               next if result.is_a?(ChatWork::APIError) and result.message == "204"
-              result.each do |m|
+              result.to_a.each do |m|
                 next if m["account"]["account_id"] == @me["account_id"]
                 user = Lita::User.find_by_id(m["account"]["account_id"])
                 unless user
