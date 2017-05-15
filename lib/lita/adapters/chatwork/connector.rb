@@ -40,7 +40,8 @@ module Lita
               result = ChatWork::Message.get(room_id: r["room_id"])
               @logger.error "thienhv"
               @logger.error "42 thienhv Message: #{result.inspect}"
-              next if result.is_a?(ChatWork::APIError) and result.message == "204"
+              # next if result.is_a?(ChatWork::APIError) and result.message == "204"
+              next if result.is_a?(ChatWork::APIError)
 
               @logger.error "45: #{result.class}"
               result.each do |m|
