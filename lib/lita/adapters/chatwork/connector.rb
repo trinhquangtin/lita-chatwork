@@ -13,7 +13,6 @@ module Lita
           @interval   = interval
           @with_reply = with_reply
           @debug      = debug
-          @logger = ::Logger.new("/home/ubuntu/thienhv.log")
         end
 
         def connect
@@ -25,10 +24,7 @@ module Lita
           loop do
             wait
             result = ChatWork::Room.get
-            p "thienhv"
-            @logger.error "thienhv 29: #{result.inspect}"
             if result.is_a?(ChatWork::APIError)
-              @logger.error "ChatWork::Room.get result: #{result} (#{result.message})"
               break
             end
 
@@ -36,22 +32,17 @@ module Lita
             unread_rooms = result.select{|r| r["unread_num"] > 0 }
             (joined_rooms | unread_rooms).each do |r|
               wait
-              @logger.error "room_id: #{r["room_id"]}"
               result = ChatWork::Message.get(room_id: r["room_id"])
-              @logger.error "thienhv"
-              @logger.error "42 thienhv Message: #{result.inspect}"
-              # next if result.is_a?(ChatWork::APIError) and result.message == "204"
               next if result.is_a?(ChatWork::APIError)
 
-              @logger.error "45: #{result.class}"
               result.each do |m|
                 next if m["account"]["account_id"] == @me["account_id"]
-                user = Lita::User.find_by_id(m["account"]["account_id"])
-                unless user
-                  user = Lita::User.create(m["account"]["account_id"],
-                                           m["account"].merge("mention_name" =>
-                                           "[To:#{m["account"]["account_id"]}] #{m["account"]["name"]}さん"))
-                end
+                # user = Lita::User.find_by_id(m["account"]["account_id"])
+                # unless user
+                user = Lita::User.create(m["account"]["account_id"],
+                                         m["account"].merge("mention_name" =>
+                                         "[To:#{m["account"]["account_id"]}] #{m["account"]["name"]}さん"))
+                # end
                 source_id = [r["room_id"], m["message_id"], m["send_time"], m["update-time"]].join("-")
                 case r["type"]
                   when "my"
@@ -97,6 +88,7 @@ module Lita
             @me = ChatWork::Me.get
             @robot.name = @me["name"]
             @robot.mention_name = "[To:#{@me["account_id"]}]"
+          rescue => e
           end
         end
 
